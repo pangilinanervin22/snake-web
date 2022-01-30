@@ -22,8 +22,8 @@ body {
 	width: 90vmin;
 	height: 90vmin;
 	display: grid;
-	grid-template-rows: repeat(24, 1fr);
-	grid-template-columns: repeat(24, 1fr);
+	grid-template-rows: repeat(18, 1fr);
+	grid-template-columns: repeat(18, 1fr);
 	padding: 3px;
 	border: 1px solid black;
 	border-radius: 1rem;
@@ -94,4 +94,33 @@ body {
 
 .modal_button:active {
 	box-shadow: 0 0 10px gray;
+}
+
+#buttons {
+	position: absolute;
+	display: grid;
+	grid-template-rows: repeat(3, 1fr);
+	grid-template-columns: repeat(3, 1fr);
+	bottom: 0;
+	right: 0;
+	z-index: 1;
+	margin: 3px;
+}
+
+.snake_control {
+	background: rebeccapurple;
+	border-radius: 0.5rem;
+	font-size: 2rem;
+	padding: 0.5rem 1rem;
+	transition: all 0.1s;
+	box-shadow: 0px 0px 10px black;
+	margin: 1px;
+	opacity: 0.8;
+	font-size: 2.4rem;
+	padding: 0.5rem 1.2rem;
+}
+
+.snake_control:hover {
+	transform: scale(1.1);
+	opacity: 1;
 }

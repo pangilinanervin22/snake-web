@@ -1,5 +1,5 @@
 const gameBoard = document.getElementById("board");
-const BOARD_SIZE = 24;
+const BOARD_SIZE = 18;
 let snake;
 let snakeMove;
 let foodLocation;
@@ -32,7 +32,7 @@ function start() {
 			clearInterval(play);
 			new Audio("https://pangilinanervin22.github.io/simon/res/lose.wav").play();
 		}
-	}, 150);
+	}, 200);
 }
 
 function updateSnake() {
@@ -67,32 +67,6 @@ function renderFood() {
 	element.classList.add("food");
 	gameBoard.appendChild(element);
 }
-
-window.addEventListener("keydown", (event) => {
-	if (event.defaultPreventedevented || lastMove === event.code) {
-		return;
-	}
-
-	if (event.code === "ArrowDown") {
-		if (lastMove === "ArrowUp") return;
-
-		snakeMove = { x: 1, y: 0 };
-	} else if (event.code === "ArrowUp") {
-		if (lastMove === "ArrowDown") return;
-
-		snakeMove = { x: -1, y: 0 };
-	} else if (event.code === "ArrowLeft") {
-		if (lastMove === "ArrowRight") return;
-
-		snakeMove = { x: 0, y: -1 };
-	} else if (event.code === "ArrowRight") {
-		if (lastMove === "ArrowLeft") return;
-
-		snakeMove = { x: 0, y: 1 };
-	}
-
-	lastMove = event.code;
-});
 
 function onSnake(item) {
 	return snake.some((segment, index) => {
@@ -159,3 +133,41 @@ function showLostModal(enabler) {
 
 // starting point
 start();
+
+// controls
+for (const item of document.getElementsByClassName("snake_control")) {
+	item.addEventListener("click", () => {
+		handleControls(item.getAttribute("id"));
+	});
+	console.log(item.getAttribute("id"));
+}
+
+window.addEventListener("keydown", (event) => {
+	if (event.defaultPreventedevented) return;
+
+	handleControls(event.code);
+});
+
+function handleControls(move) {
+	if (lastMove === move) {
+		return;
+	}
+
+	if (move === "ArrowDown") {
+		if (lastMove === "ArrowUp") return;
+		snakeMove = { x: 1, y: 0 };
+	} else if (move === "ArrowUp") {
+		if (lastMove === "ArrowDown") return;
+
+		snakeMove = { x: -1, y: 0 };
+	} else if (move === "ArrowLeft") {
+		if (lastMove === "ArrowRight") return;
+
+		snakeMove = { x: 0, y: -1 };
+	} else if (move === "ArrowRight") {
+		if (lastMove === "ArrowLeft") return;
+		snakeMove = { x: 0, y: 1 };
+	}
+
+	lastMove = move;
+}
