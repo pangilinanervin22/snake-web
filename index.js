@@ -1,41 +1,41 @@
-const gameBoard = document.getElementById("board");
-const BOARD_SIZE = 18;
-let snake;
-let snakeMove;
-let foodLocation;
-let lastMove;
-let delayKey;
+const gameBoard = document.getElementById("snake_board");
+const BOARD_SIZE = 16;
+let snake,
+	snakeMove,
+	foodLocation,
+	lastMove,
+	delayKey,
+	currentScore,
+	highestScore = 0;
 
+//for setting all varibles and rendered all function that needed
 function start() {
-	snake = [
-		{ x: 11, y: 11 },
-		{ x: 12, y: 11 },
-		{ x: 13, y: 11 },
-		{ x: 14, y: 11 },
-	];
+	snake = [{ x: 8, y: 10 }, { x: 8, y: 11 }, , { x: 8, y: 12 }, { x: 8, y: 13 }];
 
-	snakeMove = { x: -1, y: 0 };
-	foodLocation = { x: 8, y: 8 };
+	foodLocation = { x: 9, y: 8 };
+	snakeMove = { x: 0, y: -1 };
 	lastMove = "ArrowUp";
 	delayKey = false;
+	currentScore = 0;
 
-	const play = setInterval(() => {
+	const renderAll = setInterval(() => {
 		gameBoard.innerHTML = "";
 
 		updateFood();
-		updateSnake();
+		updateSnakeBody();
 		renderSnake();
 		renderFood();
 
 		if (checkDeath()) {
 			showLostModal(true);
-			clearInterval(play);
+			updateScore(0);
+			clearInterval(renderAll);
 			new Audio("https://pangilinanervin22.github.io/simon/res/lose.wav").play();
 		}
 	}, 200);
 }
 
-function updateSnake() {
+function updateSnakeBody() {
 	for (let i = snake.length - 2; i >= 0; i--) snake[i + 1] = { ...snake[i] };
 
 	snake[0].y += snakeMove.y;
@@ -45,6 +45,7 @@ function updateSnake() {
 function updateFood() {
 	if (equalPosition(foodLocation, getSnakeHead())) {
 		expandSnake();
+		updateScore(++currentScore);
 		foodLocation = getRandomFood();
 		new Audio("https://pangilinanervin22.github.io/simon/res/coin_sound.wav").play();
 	}
@@ -53,8 +54,8 @@ function updateFood() {
 function renderSnake() {
 	snake.forEach((eachBody) => {
 		const element = document.createElement("div");
-		element.style.gridRowStart = eachBody.x;
-		element.style.gridColumnStart = eachBody.y;
+		element.style.gridRowStart = eachBody.y;
+		element.style.gridColumnStart = eachBody.x;
 		element.classList.add("snake");
 		gameBoard.appendChild(element);
 	});
@@ -62,8 +63,8 @@ function renderSnake() {
 
 function renderFood() {
 	const element = document.createElement("div");
-	element.style.gridRowStart = foodLocation.x;
-	element.style.gridColumnStart = foodLocation.y;
+	element.style.gridRowStart = foodLocation.y;
+	element.style.gridColumnStart = foodLocation.x;
 	element.classList.add("food");
 	gameBoard.appendChild(element);
 }
@@ -113,6 +114,14 @@ function snakeIntersection() {
 	return onSnake(getSnakeHead());
 }
 
+function updateScore(score) {
+	if (currentScore > highestScore) highestScore = currentScore = score;
+	else currentScore = score;
+
+	document.getElementById("current_score").textContent = "Current : " + currentScore;
+	document.getElementById("highest_score").textContent = "Highest : " + highestScore;
+}
+
 // modal script
 const modal = document.getElementById("modal_overlay");
 const modalButton = document.getElementById("modal_button");
@@ -131,16 +140,11 @@ function showLostModal(enabler) {
 	}
 }
 
-// starting point
-start();
-
 // controls
-for (const item of document.getElementsByClassName("snake_control")) {
+for (const item of document.getElementsByClassName("snake_control"))
 	item.addEventListener("click", () => {
 		handleControls(item.getAttribute("id"));
 	});
-	console.log(item.getAttribute("id"));
-}
 
 window.addEventListener("keydown", (event) => {
 	if (event.defaultPreventedevented) return;
@@ -149,25 +153,45 @@ window.addEventListener("keydown", (event) => {
 });
 
 function handleControls(move) {
-	if (lastMove === move) {
-		return;
-	}
+	if (lastMove === move) return;
 
 	if (move === "ArrowDown") {
 		if (lastMove === "ArrowUp") return;
-		snakeMove = { x: 1, y: 0 };
+		snakeMove = { x: 0, y: 1 };
 	} else if (move === "ArrowUp") {
 		if (lastMove === "ArrowDown") return;
-
-		snakeMove = { x: -1, y: 0 };
+		snakeMove = { x: 0, y: -1 };
 	} else if (move === "ArrowLeft") {
 		if (lastMove === "ArrowRight") return;
-
-		snakeMove = { x: 0, y: -1 };
+		snakeMove = { x: -1, y: 0 };
 	} else if (move === "ArrowRight") {
 		if (lastMove === "ArrowLeft") return;
-		snakeMove = { x: 0, y: 1 };
+		snakeMove = { x: 1, y: 0 };
 	}
 
 	lastMove = move;
 }
+
+//border design
+const boardDesign = document.getElementById("design_board");
+
+let noRepeat = false;
+for (let i = 0; i < BOARD_SIZE; i++) {
+	noRepeat = !noRepeat;
+	for (let y = 0; y < BOARD_SIZE; y += 2) {
+		const element = document.createElement("div");
+		element.style.gridRowStart = y;
+		element.classList.add(i % 2 === 0 ? "black_box" : "white_box");
+		boardDesign.appendChild(element);
+	}
+
+	for (let u = 1; u < BOARD_SIZE; u += 2) {
+		const element = document.createElement("div");
+		element.style.gridRowStart = u;
+		element.classList.add(i % 2 === 0 ? "white_box" : "black_box");
+		boardDesign.appendChild(element);
+	}
+}
+
+// starting point
+start();

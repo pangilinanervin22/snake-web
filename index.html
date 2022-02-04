@@ -4,19 +4,30 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
+		<title>Snake</title>
+		<link rel="shortcut icon" href="snake.svg" type="image/x-icon" />
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
-		<div id="board"></div>
-		<div id="buttons">
-			<br />
-			<button id="ArrowUp" class="snake_control">↑</button> <br />
-			<button id="ArrowLeft" class="snake_control">←</button> <br />
-			<button id="ArrowRight" class="snake_control">→</button>
-			<br />
-			<button id="ArrowDown" class="snake_control">↓</button>
-		</div>
+		<section id="snake_game">
+			<header>
+				<h1 id="current_score">Current : 0</h1>
+				<h1 id="highest_score">highest : 0</h1>
+			</header>
+			<div id="board">
+				<div id="snake_board"></div>
+				<div id="design_board"></div>
+			</div>
+
+			<div id="snake_buttons">
+				<br />
+				<button id="ArrowUp" class="snake_control">↑</button> <br />
+				<button id="ArrowLeft" class="snake_control">←</button> <br />
+				<button id="ArrowRight" class="snake_control">→</button>
+				<br />
+				<button id="ArrowDown" class="snake_control">↓</button>
+			</div>
+		</section>
 
 		<section id="modal_overlay" class="hide">
 			<div class="modal_content">
